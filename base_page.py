@@ -14,4 +14,15 @@ class BasePage():
            self.browser.find_element(how, what)
         except (NoSuchElementException):
            return False
-        return True     
+        return True 
+    def check_atribut_text(self, element, attribute_name, text):
+        if element.get_attribute(attribute_name) == text:   
+            return True
+        else:
+            return False
+    def check_text(self, element, text):
+        if element.text == text:   
+            return True
+        else:
+            return False
+        
