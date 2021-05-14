@@ -32,7 +32,7 @@ class MainPage(BasePage):
     def check_open_tl(self): #Проверка открытия TL
         assert self.is_element_present(By.CSS_SELECTOR, '[class="info-cell-first-column"]'), "TL не открылся"
 
-    def new_event_in_tl(self): #Создание события Шаблон Шаблоныч через кнопку создать событие
+    def new_event_in_tl_from_button(self): #Создание события Шаблон Шаблоныч через кнопку создать событие
         create_event_button = self.browser.find_element(By.ID, 'addEventBtnId')
         create_event_button.click()
         shablon_event_button = self.browser.find_element(By.ID, '019fa8f1-3475-48b6-bc76-cd05fb357f2f')
@@ -60,17 +60,50 @@ class MainPage(BasePage):
         enter_edindtsi_oborudovania_button = self.browser.find_element(By.XPATH, '//span[text()="ВЫБРАТЬ"]')
         enter_edindtsi_oborudovania_button.click()
         naimenovanie_rabochego_sentra = self.browser.find_element(By.CSS_SELECTOR, '.standart-input-styles.to-validate.subdivision.controll-with-but.ng-pristine.ng-untouched.ng-valid.ng-not-empty')
-        print(naimenovanie_rabochego_sentra.get_attribute('value'))
         assert self.check_atribut_text(naimenovanie_rabochego_sentra, 'value', 'Группа ИЛИМ\Братск\Вспом. структурные подразделения\Пр-во по водопод.и инж.коммуник.\Цех очистных сооружений промстоков\Иловая станция №1'), 'Наименование рабочего центра не совпадает'
         checkbox_prichini_sobitia = self.browser.find_elements(By.CSS_SELECTOR, '.checkbox-wrap.small.pull-left label span')
         checkbox_prichini_sobitia[2].click()
         sefe_and_close_button = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
         sefe_and_close_button[2].click()
         event_creation_massage = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success')
-        assert self.is_element_present(By.CSS_SELECTOR, '#toast-container .toast.toast-success') and self.check_text(event_creation_massage, 'Cобытие успешно создано'), 'Нет сообщения о создании события'
+        assert self.check_text(event_creation_massage, 'Событие успешно создано'), 'Нет сообщения о создании события через кнопку Создать событие'
+        
+    def new_event_in_tl_from_menu(self):
+        open_group_ilim = self.browser.find_element(By.CSS_SELECTOR, '.k-top.k-bot.ng-scope .k-icon.k-i-expand')
+        open_group_ilim.click()
+        time.sleep(1)
+        open_bratsk = self.browser.find_element(By.CSS_SELECTOR, '.k-bot .k-icon.k-i-expand')
+        open_bratsk.click()
+        time.sleep(1)
+        open_vspom_struktur_podrasdel = self.browser.find_element(By.CSS_SELECTOR, '.k-top .k-icon.k-i-expand')
+        open_vspom_struktur_podrasdel.click()
+        time.sleep(1)
+        open_prvo_po_vodopod_i_ing_kommunic = self.browser.find_element(By.CSS_SELECTOR, '.k-top .k-icon.k-i-expand')
+        open_prvo_po_vodopod_i_ing_kommunic.click()
+        time.sleep(1)
+        open_seh_ochis_sooruzh_promstokov = self.browser.find_element(By.CSS_SELECTOR, '.k-bot .k-icon.k-i-expand')
+        open_seh_ochis_sooruzh_promstokov.click()
+        time.sleep(1)        
+        click_ilovai_stantsia_1 = self.browser.find_elements(By.CSS_SELECTOR, '.k-mid .k-in .tl-item-table tbody tr .ng-binding')
+        self.right_click(click_ilovai_stantsia_1[2])        
+        time.sleep(1)
+        create_event_button = self.browser.find_element(By.CSS_SELECTOR, '.elem a')
+        create_event_button.click()
+        shablon_event_button = self.browser.find_element(By.ID, '019fa8f1-3475-48b6-bc76-cd05fb357f2f')
+        shablon_event_button.click()
+        time.sleep(1)
+        naimenovanie_rabochego_sentra = self.browser.find_element(By.CSS_SELECTOR, '.standart-input-styles.to-validate.subdivision.controll-with-but.ng-pristine.ng-untouched.ng-valid.ng-not-empty')
+        assert self.check_atribut_text(naimenovanie_rabochego_sentra, 'value', 'Группа ИЛИМ\Братск\Вспом. структурные подразделения\Пр-во по водопод.и инж.коммуник.\Цех очистных сооружений промстоков\Иловая станция №1'), 'Наименование рабочего центра не совпадает'
+        checkbox_prichini_sobitia = self.browser.find_elements(By.CSS_SELECTOR, '.checkbox-wrap.small.pull-left label span')
+        checkbox_prichini_sobitia[2].click()
+        sefe_and_close_button = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
+        sefe_and_close_button[2].click()
+        event_creation_massage = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success')
+        print(event_creation_massage.text)
+        assert self.check_text(event_creation_massage, 'Событие успешно создано'), 'Нет сообщения о создании события через меню'
+        
         
 
-
-
+        
 
 

@@ -3,7 +3,8 @@ from selenium import webdriver
 
 @pytest.fixture
 def browser():    
-    browser = webdriver.Chrome()
-    browser.maximize_window()
+    browser = webdriver.Chrome()    
+    browser.maximize_window()    
     yield browser    
     browser.quit()
+
