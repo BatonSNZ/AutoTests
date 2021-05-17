@@ -32,12 +32,14 @@ class MainPage(BasePage):
     def check_open_tl(self): #Проверка открытия TL
         assert self.is_element_present(By.CSS_SELECTOR, '[class="info-cell-first-column"]'), "TL не открылся"
 
-    def new_event_in_tl_from_button(self): #Создание события Шаблон Шаблоныч через кнопку создать событие
+    def open_create_new_event_shablon_shablonich(self): #Открытие крточки нового события через кнопку "Создать событие"
         create_event_button = self.browser.find_element(By.ID, 'addEventBtnId')
         create_event_button.click()
         shablon_event_button = self.browser.find_element(By.ID, '019fa8f1-3475-48b6-bc76-cd05fb357f2f')
         shablon_event_button.click()
         assert self.is_element_present(By.CSS_SELECTOR,'[value="ВЫБРАТЬ..."]'), "Карточка события не открылась или там ошибка"
+
+    def enter_data_into_event_shablon_shablonich(self): #Заполнение карточки события Шаблон Шаблоныч        
         work_center_selection_button = self.browser.find_element(By.CSS_SELECTOR, '[value="ВЫБРАТЬ..."]')
         work_center_selection_button.click()
         open_group_ilim = self.browser.find_element(By.CSS_SELECTOR, '.modalWindow.ktp-wrapper.checkbox-wrap .ng-isolate-scope .ng-scope .atp-block .atp-content .atp-content-wrap #atp-panelbar .k-state-active.k-item.k-first.k-last.k-state-highlight .atp-treelist-wrap.k-content .atp-main-list.pmm-custom-scroll .ng-scope.ng-isolate-scope #atp-treelist .k-group.k-treeview-lines .k-item.k-first.k-last .ng-scope.k-top.k-bot .k-icon.k-i-expand')
@@ -65,10 +67,10 @@ class MainPage(BasePage):
         checkbox_prichini_sobitia[2].click()
         sefe_and_close_button = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
         sefe_and_close_button[2].click()
-        event_creation_massage = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success')
-        assert self.check_text(event_creation_massage, 'Событие успешно создано'), 'Нет сообщения о создании события через кнопку Создать событие'
+        event_creation_message = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success')
+        assert self.check_text(event_creation_message, 'Событие успешно создано'), 'Нет сообщения о создании события через кнопку Создать событие'
         
-    def new_event_in_tl_from_menu(self):
+    def new_event_in_tl_from_menu(self): #Открытие карточки события Шаблон Шаблоныч через меню
         open_group_ilim = self.browser.find_element(By.CSS_SELECTOR, '.k-top.k-bot.ng-scope .k-icon.k-i-expand')
         open_group_ilim.click()
         time.sleep(1)
@@ -94,13 +96,46 @@ class MainPage(BasePage):
         time.sleep(1)
         naimenovanie_rabochego_sentra = self.browser.find_element(By.CSS_SELECTOR, '.standart-input-styles.to-validate.subdivision.controll-with-but.ng-pristine.ng-untouched.ng-valid.ng-not-empty')
         assert self.check_atribut_text(naimenovanie_rabochego_sentra, 'value', 'Группа ИЛИМ\Братск\Вспом. структурные подразделения\Пр-во по водопод.и инж.коммуник.\Цех очистных сооружений промстоков\Иловая станция №1'), 'Наименование рабочего центра не совпадает'
+        
+    def enter_data_into_event_shablon_shablonich_no_work_center(self): #Заполнение карточки события Шаблон Шаблоныч после открытия через меню
         checkbox_prichini_sobitia = self.browser.find_elements(By.CSS_SELECTOR, '.checkbox-wrap.small.pull-left label span')
         checkbox_prichini_sobitia[2].click()
         sefe_and_close_button = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
         sefe_and_close_button[2].click()
-        event_creation_massage = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success')
-        print(event_creation_massage.text)
-        assert self.check_text(event_creation_massage, 'Событие успешно создано'), 'Нет сообщения о создании события через меню'
+        event_creation_message = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success')        
+        assert self.check_text(event_creation_message, 'Событие успешно создано'), 'Нет сообщения о создании события через меню'
+
+    def check_auto_open_menu(self): #Проверка автораскрытия меню до выбранного элемента        
+        work_center_selection_button = self.browser.find_element(By.CSS_SELECTOR, '[value="ВЫБРАТЬ..."]')
+        work_center_selection_button.click()
+        time.sleep(5)
+        checkbox_ilovai_stantsia_1 = self.browser.find_element(By.ID, 'checkbox_40ea6f89-9931-11eb-8da9-00155d252971')
+        print(checkbox_ilovai_stantsia_1.get_attribute('class'))
+        assert self.check_atribut_text(checkbox_ilovai_stantsia_1, 'class', 'ng-pristine ng-untouched ng-valid ng-not-empty'), 'Нет автораскрытия меню'
+
+    def open_event_frame(self): #Открытие карточки события
+        event_frame = self.browser.find_element(By.CSS_SELECTOR, '.table-structure-line')
+        self.double_click(event_frame)
+        time.sleep(1)
+        assert self.is_element_present(By.CSS_SELECTOR,'[value="ВЫБРАТЬ..."]'), "Карточка события не открылась или там ошибка"
+
+    def change_event_frame(self): #Внесение изменений в карточку события 
+        open_name_equipmqnt = self.browser.find_element(By.CSS_SELECTOR, '[name="Values[094b518e-d731-4082-a316-91a622936c8e].Value_input"]')
+        open_name_equipmqnt.clear()
+        open_name_equipmqnt.send_keys("1")
+        time.sleep(1)
+        open_name_equipmqnt.send_keys(Keys.ENTER)        
+        sefe_and_close_button = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
+        sefe_and_close_button[2].click()
+        event_change_messege = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success .toast-message')
+        assert self.check_text(event_change_messege, 'Событие успешно обновлено'), 'Ошибка при сохранении изменений'
+
+
+
+
+
+
+
         
         
 

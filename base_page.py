@@ -1,5 +1,6 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import Select
 
 class BasePage():
     def __init__(self, browser, url, timeout=10):
@@ -28,6 +29,15 @@ class BasePage():
             return True
         else:
             return False
+
     def right_click(self, here):       
         action = ActionChains(self.browser)
         action.context_click(on_element = here).perform()
+
+    def double_click(self, here):       
+        action = ActionChains(self.browser)
+        action.double_click(on_element = here).perform()
+
+    def refresh_page(self):
+        self.browser.refresh()
+    
