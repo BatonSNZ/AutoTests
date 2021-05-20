@@ -207,7 +207,110 @@ class MainPage(BasePage):
         open_invest[2].click()
         time.sleep(1)        
         open_invest[3].click()
+        button_add_invest = self.browser.find_element(By.CSS_SELECTOR, '[title="Добавить вложение"]')
+        button_add_invest.click()
+        button_select_file = self.browser.find_elements(By.CSS_SELECTOR, '[type="file"]')
+        button_select_file[1].send_keys(self.enter_file('for_auto_test.txt'))
+        enter_comment = self.browser.find_element(By.CSS_SELECTOR, '[placeholder="введите комментарий"]')
+        enter_comment.clear()
+        enter_comment.send_keys("Comment Комментарий №123 ")
+        button_save = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
+        button_save[3].click()
+        sefe_and_close_button = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
+        sefe_and_close_button[2].click()
+        event_change_messege = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success .toast-message')
+        assert self.check_text(event_change_messege, 'Событие успешно обновлено'), 'Ошибка при сохранении изменений'
+
+    def check_investments(self): #Проверка вложения
+        open_event = self.browser.find_elements(By.CSS_SELECTOR, '.table-structure-line .space')
+        self.double_click(open_event[0])
+        open_invest = self.browser.find_elements(By.CSS_SELECTOR, '.k-item.k-state-default')        
+        open_invest[2].click()
+        time.sleep(1)        
+        open_invest[3].click()
+        name_file = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.Name"]')
+        comment_for_file = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.Comment"]')
+        time.sleep(1)
+        assert self.check_text(name_file[1], 'for_auto_test.txt'), 'Не совпадает имя файла или его нет'
+        assert self.check_text(comment_for_file[1], 'Comment Комментарий №123'), 'Не совпадает комментарий или его нет'
+
+    def delete_event_checkbox(self): #Удаление события через чекбокс 
+        checkbox_event = self.browser.find_elements(By.CSS_SELECTOR, '.info-cell-first-column .checkbox-wrap.small')
+        checkbox_event[0].click()
+        button_delete = self.browser.find_element(By.ID, 'deleteEventBtnId')
+        button_delete.click()
+        comment_delete = self.browser.find_element(By.CSS_SELECTOR, '[class="standart-input-styles ng-pristine ng-untouched ng-valid ng-empty"]')
+        comment_delete.send_keys("Удаление autotest №123")
+        button_yes = self.browser.find_element(By.CSS_SELECTOR, '.ui-button-text')
+        button_yes.click()
+        event_delete_messege = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success .toast-message')
+        assert self.check_text(event_delete_messege, 'Событие успешно удалено'), 'Ошибка при удалении события через чекбокс'
+    
+    def delete_event(self): #Удаление события через карточку события
+        open_event = self.browser.find_elements(By.CSS_SELECTOR, '.table-structure-line .space')
+        self.double_click(open_event[0])
+        delete_button = self.browser.find_element(By.CSS_SELECTOR, '.ui-button-text.button-delete')
+        delete_button.click()
+        comment_delete = self.browser.find_element(By.CSS_SELECTOR, '[class="standart-input-styles ng-pristine ng-untouched ng-valid ng-empty"]')
+        comment_delete.send_keys("Удаление autotest №123")
+        button_yes = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-left .ui-button-text')
+        button_yes[2].click()
+        event_delete_messege = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success .toast-message')
+        assert self.check_text(event_delete_messege, 'Событие успешно удалено'), 'Ошибка при удалении события через картоочку события'
+
+    def filter_even_menu(self): #Фильтрация событий по группе объектов
+        open_group_ilim = self.browser.find_element(By.CSS_SELECTOR, '.k-top.k-bot.ng-scope .k-icon.k-i-expand')
+        open_group_ilim.click()
+        time.sleep(1)
+        open_bratsk = self.browser.find_element(By.CSS_SELECTOR, '.k-bot .k-icon.k-i-expand')
+        open_bratsk.click()
+        time.sleep(1)
+        open_vspom_struktur_podrasdel = self.browser.find_element(By.CSS_SELECTOR, '.k-top .k-icon.k-i-expand')
+        open_vspom_struktur_podrasdel.click()
+        time.sleep(1)
+        open_prvo_po_vodopod_i_ing_kommunic = self.browser.find_element(By.CSS_SELECTOR, '.k-top .k-icon.k-i-expand')
+        open_prvo_po_vodopod_i_ing_kommunic.click()
+        time.sleep(1)
+        open_seh_ochis_sooruzh_promstokov = self.browser.find_element(By.CSS_SELECTOR, '.k-bot .k-icon.k-i-expand')
+        open_seh_ochis_sooruzh_promstokov.click()
+        time.sleep(1)        
+        click_shlamovaia_nasosnaia_stantsia = self.browser.find_element(By.CSS_SELECTOR, '[title="Шламовая насосная станция"]') 
+        click_shlamovaia_nasosnaia_stantsia.click()
+        time.sleep(1)
+        assert self.is_element_present(By.CSS_SELECTOR, '[class="info-cell-first-column"]'), "TL не обновился"        
+
+    def check_filter_event_menu(self): # Проверка фильрации событий по группе объектов        
+        namber_event = self.browser.find_element(By.CSS_SELECTOR, '.k-pager-info.k-label')
+        name_event = self.browser.find_elements(By.CSS_SELECTOR, '.table-structure-line div span span')
+        assert self.check_text(namber_event, '1-1 из 1'), "Не одно событие на странице"
+        assert self.check_text(name_event[2], 'Шламовая насосная станция'), "Рабочий центр не Шламовая насосная станция"
+
+    def open_settings(self): # Открытие настроек TL представление простой оборудования
+        list_posible = self.browser.find_element(By.CSS_SELECTOR, '[title="Список возможностей"]')
+        list_posible.click()
+        settings_menu = self.browser.find_element(By.CSS_SELECTOR, '.settings-menu-link')
+        settings_menu.click()
+        smenai_zhurnal = self.browser.find_element(By.CSS_SELECTOR, '[title="Сменный журнал"]')
+        smenai_zhurnal.click()
+
+    def changing_number_events(self):
+        predstavlenia =self.browser.find_element(By.CSS_SELECTOR, 'title="Представления"')
+        predstavlenia.click()
+        predstavl_prostoi_oborud = self.browser.find_element(By.CSS_SELECTOR, '[title="Простой оборудования"]')
+        predstavl_prostoi_oborud.click()
+        oblast_prosmotra = self.browser.find_element(By.CSS_SELECTOR, '[role="gridcell"]')
+        oblast_prosmotra[5].click()
         
+
+
+
+
+
+
+
+
+
+
 
 
         

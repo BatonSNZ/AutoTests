@@ -1,6 +1,6 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support.ui import Select
+import os
 
 class BasePage():
     def __init__(self, browser, url, timeout=10):
@@ -40,4 +40,10 @@ class BasePage():
 
     def refresh_page(self):
         self.browser.refresh()
+
+    def enter_file(self, file):
+        current_dir = os.path.abspath(os.path.dirname(__file__))
+        file_path = os.path.join(current_dir, file)
+        return file_path
+
     

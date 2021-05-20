@@ -1,0 +1,14 @@
+<add name="ISPContext" providerName="System.Data.SqlClient" connectionString="Data Source=SQL_Perf;Initial Catalog=ISP;uid=sa;pwd=1;MultipleActiveResultSets=True;" />
+    <!-- <add name="ISPContext" providerName="System.Data.SqlClient" connectionString="Data Source=DEVELOP_PMM2;Initial Catalog=ISP;uid=sa;pwd=1;MultipleActiveResultSets=True;" /> -->
+    <!-- <add name="AFDatabaseContext" providerName="System.Data.SqlClient" connectionString="Data Source=192.168.32.72;Initial Catalog=PIFD;uid=sa;pwd=1;MultipleActiveResultSets=True;" /> -->
+	<add name="AFDatabaseContext" providerName="System.Data.SqlClient" connectionString="Data Source=SQL_PERF;Initial Catalog=PIFD_low;uid=sa;pwd=1;MultipleActiveResultSets=True;" />
+    <add name="IDSTL" providerName="System.Data.SqlClient" connectionString="Data Source=SQL_PERF;Initial Catalog=TL;uid=sa;pwd=1;MultipleActiveResultSets=True;" />
+
+
+<add key="AdviserModel" value="ялнор" />
+    <add key="PSView" value="" />
+    <add key="PIAFSystem" value="PIAF_PERF" />
+    <add key="PIAFDatabase" value="Performance" />
+	<!-- <add key="PIAFDatabase" value="TEST" /> -->
+    <add key="PIAFUserName" value="" />
+    <add key="PIAFPassword" value="" />
