@@ -12,6 +12,8 @@ def test_go_to_tl(browser): # Вход в журнал TL
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL 
 
@@ -19,6 +21,8 @@ def test_create_new_event_button(browser): # Создание события в 
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL
     page.open_create_new_event_shablon_shablonich()                 #Открытие крточки нового события Шаблон Шаблоныч через кнопку "Создать событие"
@@ -28,6 +32,8 @@ def test_create_new_event_menu(browser): # Создание события че�
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL
     page.new_event_in_tl_from_menu()                                #Создание события Шаблон Шаблоныч через меню
@@ -38,6 +44,8 @@ def test_auto_open_menu(browser): # Раскрытие структуры дан
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL
     page.new_event_in_tl_from_menu()                                #Открытие карточки события Шаблон Шаблоныч через меню
@@ -47,6 +55,8 @@ def test_change_event(browser): # Редактирование события в
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL
     page.new_event_in_tl_from_menu()                                #Создание события Шаблон Шаблоныч через меню
@@ -58,10 +68,13 @@ def test_change_event(browser): # Редактирование события в
     page.open_event_frame()                                         #Открытие карточки события
     page.check_change_in_event()                                    #Проверка изменений на вкладке История
 
+
 def test_create_attach_event(browser): # Создание вложенного события и вкладка Связи
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL
     page.new_event_in_tl_from_menu()                                #Создание события Шаблон Шаблоныч через меню
@@ -76,6 +89,8 @@ def test_add_investments(browser): # Добавление вложения и в
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL
     page.new_event_in_tl_from_menu()                                #Создание события Шаблон Шаблоныч через меню
@@ -89,6 +104,8 @@ def test_delete_event(browser): # Удаление события в журна�
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL
     page.new_event_in_tl_from_menu()                                #Создание события Шаблон Шаблоныч через меню
@@ -101,23 +118,49 @@ def test_delete_event(browser): # Удаление события в журна�
     page.refresh_page()                                             #Обновление страницы
     page.delete_event()                                             #Удаление события через карточку события
 
-def test_filter_menu(browser): # Фильтрация событий по группе объектов
-    link = "http://192.168.36.28:8093"
-    page = MainPage(browser, link)
-    page.open()
-    page.open_tl()                                                  #Открытие TL
-    page.check_open_tl()                                            #Проверка отрытия TL
-    page.filter_even_menu()                                         #Фильтрация событий по группе объектов
-    page.check_filter_event_menu()                                  #Проверка фильтрации по группе объектов
 
-@pytest.mark.work
-def test_pages(browser):
+def test_filter_menu(browser): # Фильтрация событий по группе объектов
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
     page.open()
     page.in_to_login()                                              #Авторизация на портале
     page.should_be_start_page()                                     #Проверка автризации
-    page.open_settings()                                            #Открытие натроек TL
-    page.changing_number_events()                                   #Изменение колличества событий на странице журнала TL
+    page.open_tl()                                                  #Открытие TL
+    page.check_open_tl()                                            #Проверка отрытия TL
+    page.filter_even_menu()                                         #Фильтрация событий по группе объектов
+    page.check_filter_event_menu()                                  #Проверка фильтрации по группе объектов
 
+def test_pages(browser): # Пейджинг 
+    link = "http://192.168.36.28:8093"
+    page = MainPage(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_settings_tl()                                         #Открытие натроек TL
+    page.select_page()                                              #Выбор чек-бокса в настройках с постраничной разбивкой
+    page.open_tl()                                                  #Открытие TL
+    page.check_open_tl()                                            #Проверка отрытия TL
+    page.check_number_page()                                        #Проверка наличия страниц
+    page.open_settings_tl()                                         #Открытие натроек TL
+    page.select_no_page()                                           #Выбор чек-бокса в настройках с бесконечным списком событий
+    page.open_tl()                                                  #Открытие TL
+    page.check_open_tl()                                            #Проверка отрытия TL
+    page.check_no_number_page()                                     #Проверка отсутствия страниц
+
+
+def test_filter_time(browser): # Фильтрация по времени
+    link = "http://192.168.36.28:8093"
+    page = MainPage(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации   
+    page.open_tl()                                                  #Открытие TL
+    page.check_open_tl()                                            #Проверка отрытия TL
+    page.changes_time_tl()                                          #Изменение временого диапазона
+
+@pytest.mark.work
+def test_login_domen_user(browser): # Авторизация за доменного пользователя и проверка ограничения прав
+    link = "http://192.168.36.28:8093"
+    page = MainPage(browser, link)
+    page.open()
 

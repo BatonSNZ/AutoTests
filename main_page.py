@@ -17,15 +17,7 @@ class MainPage(BasePage):
     def should_be_start_page(self): #Проверка аторизации
         assert self.is_element_present(By.XPATH, '//a[text()="TL"]'), "Не авторизовался"    
 
-    def open_tl(self): #Открытие TL
-        username_fild = self.browser.find_element(By.ID, 'txtUserName')
-        username_fild.clear()
-        username_fild.send_keys("sam")
-        password_fild = self.browser.find_element(By.ID, 'txtPassword')
-        password_fild.clear()
-        password_fild.send_keys("sam")
-        enter_button = self.browser.find_element(By.CLASS_NAME, 'btn-login')
-        enter_button.click()
+    def open_tl(self): #Открытие TL        
         tl_button = self.browser.find_element(By.XPATH, '//a[text()="TL"]')
         tl_button.click()
 
@@ -96,7 +88,7 @@ class MainPage(BasePage):
         assert self.check_atribut_text(naimenovanie_rabochego_sentra, 'value', 'Группа ИЛИМ\Братск\Вспом. структурные подразделения\Пр-во по водопод.и инж.коммуник.\Цех очистных сооружений промстоков\Иловая станция №1'), 'Наименование рабочего центра не совпадает'
         button_comment = self.browser.find_element(By.CSS_SELECTOR, '.fa.fa-plus.btn-comment.pull-right')
         button_comment.click()
-        comment_area = self.browser.find_element(By.CSS_SELECTOR, '.to-validate.ng-pristine.ng-empty.ng-invalid.ng-invalid-required.ng-touched')
+        comment_area = self.browser.find_element(By.CSS_SELECTOR, '[name="Values[a43f4cb3-04ae-4eb3-3fd7-d56ebed4c5a0].Value"]')
         comment_area.clear()
         comment_area.send_keys("Auto test №123")
         button_self_comment = self.browser.find_element(By.ID, 'confirmComment_a43f4cb3-04ae-4eb3-3fd7-d56ebed4c5a0')
@@ -282,10 +274,10 @@ class MainPage(BasePage):
     def check_filter_event_menu(self): # Проверка фильрации событий по группе объектов        
         namber_event = self.browser.find_element(By.CSS_SELECTOR, '.k-pager-info.k-label')
         name_event = self.browser.find_elements(By.CSS_SELECTOR, '.table-structure-line div span span')
-        assert self.check_text(namber_event, '1-1 из 1'), "Не одно событие на странице"
+        #assert self.check_text(namber_event, '1-1 из 1'), "Не одно событие на странице"
         assert self.check_text(name_event[2], 'Шламовая насосная станция'), "Рабочий центр не Шламовая насосная станция"
 
-    def open_settings(self): # Открытие настроек TL представление простой оборудования
+    def open_settings_tl(self): # Открытие настроек TL представление простой оборудования
         list_posible = self.browser.find_element(By.CSS_SELECTOR, '[title="Список возможностей"]')
         list_posible.click()
         settings_menu = self.browser.find_element(By.CSS_SELECTOR, '.settings-menu-link')
@@ -293,20 +285,76 @@ class MainPage(BasePage):
         smenai_zhurnal = self.browser.find_element(By.CSS_SELECTOR, '[title="Сменный журнал"]')
         smenai_zhurnal.click()
 
-    def changing_number_events(self):
-        predstavlenia =self.browser.find_element(By.CSS_SELECTOR, 'title="Представления"')
+    def select_no_page(self): # Выбор чек-бокса в настройках с бесконечным колличеством событий на странице
+        predstavlenia =self.browser.find_element(By.CSS_SELECTOR, '[title="Представления"]')
         predstavlenia.click()
         predstavl_prostoi_oborud = self.browser.find_element(By.CSS_SELECTOR, '[title="Простой оборудования"]')
         predstavl_prostoi_oborud.click()
-        oblast_prosmotra = self.browser.find_element(By.CSS_SELECTOR, '[role="gridcell"]')
+        oblast_prosmotra = self.browser.find_elements(By.CSS_SELECTOR, '[role="gridcell"]')
         oblast_prosmotra[5].click()
+        checkbox_page = self.browser.find_element(By.CSS_SELECTOR, '[for="sp-2-col"]')
+        checkbox_page.click()
+        checkbox_no_page = self.browser.find_element(By.CSS_SELECTOR, '[for="sp-1-col"]')
+        checkbox_no_page.click()
+        changes_settings_messege = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success .toast-message')
+        assert self.check_text(changes_settings_messege, 'Настройки области просмотра успешно изменены'), 'Ошибка при изменении настроек страниц'
+
+    def select_page(self): # Выбор чек-бокса в настройках с колличеством событий на странице
+        predstavlenia = self.browser.find_element(By.CSS_SELECTOR, '[title="Представления"]')
+        predstavlenia.click()        
+        predstavl_prostoi_oborud = self.browser.find_element(By.CSS_SELECTOR, '[title="Простой оборудования"]')
+        predstavl_prostoi_oborud.click()
+        oblast_prosmotra = self.browser.find_elements(By.CSS_SELECTOR, '[role="gridcell"]')
+        oblast_prosmotra[5].click()
+        checkbox_page = self.browser.find_element(By.CSS_SELECTOR, '[for="sp-1-col"]')
+        checkbox_page.click()
+        #select_numder_page = self.browser.find_element(By.CSS_SELECTOR, '[class="k-formatted-value numerical-select top-select-numerical k-input"]')
+        #select_numder_page.clear()
+        #select_numder_page.send_keys("21")
+        checkbox_no_page = self.browser.find_element(By.CSS_SELECTOR, '[for="sp-2-col"]')
+        checkbox_no_page.click()        
+        changes_settings_messege = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success .toast-message')
+        assert self.check_text(changes_settings_messege, 'Настройки области просмотра успешно изменены'), 'Ошибка при изменении настроек страниц'
+
+    def check_number_page(self):        
+        assert self.is_element_present(By.CSS_SELECTOR, '[title="Вернуться на первую страницу"]'), 'Нет кнопки Вернуться на первую страницу'
+        assert self.is_element_present(By.CSS_SELECTOR, '[title="Перейти на предыдущую страницу"]'), 'Нет кнопки Перейти на предыдущую страницу'
+        assert self.is_element_present(By.CSS_SELECTOR, '[class="k-pager-numbers k-reset"]'), 'Нет кнопок выбора страниц'
+        assert self.is_element_present(By.CSS_SELECTOR, '[class="k-pager-input k-label"]'), 'Нет поля числа страниц из'
+        assert self.is_element_present(By.CSS_SELECTOR, '[title="Перейдите на следующую страницу"]'), 'Нет кнопки Перейдите на следующую страницу'
+        assert self.is_element_present(By.CSS_SELECTOR, '[title="К последней странице"]'), 'Нет кнопки К последней странице'
+        assert self.is_element_present(By.CSS_SELECTOR, '[class="k-pager-info k-label"]'), 'Нет поля с количеством страниц и событий'
+
+    def check_no_number_page(self):
+        assert self.is_element_no_present(By.CSS_SELECTOR, '[title="Вернуться на первую страницу"]'), 'Есть кнопка Вернуться на первую страницу'
+        assert self.is_element_no_present(By.CSS_SELECTOR, '[title="Перейти на предыдущую страницу"]'), 'Есть кнопка Перейти на предыдущую страницу'
+        assert self.is_element_no_present(By.CSS_SELECTOR, '[class="k-pager-numbers k-reset"]'), 'Есть кнопка выбора страниц'
+        assert self.is_element_no_present(By.CSS_SELECTOR, '[class="k-pager-input k-label"]'), 'Есть поле числа страниц из'
+        assert self.is_element_no_present(By.CSS_SELECTOR, '[title="Перейдите на следующую страницу"]'), 'Есть кнопка Перейдите на следующую страницу'
+        assert self.is_element_no_present(By.CSS_SELECTOR, '[title="К последней странице"]'), 'Есть кнопка К последней странице'
+        assert self.is_element_present(By.CSS_SELECTOR, '[class="k-pager-info k-label"]'), 'Нет поля с количеством событий'
+
+    def changes_time_tl(self):
+        old_namber_event = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]').text
+        button_time = self.browser.find_element(By.CSS_SELECTOR, '[id="isDateFilterAvaibleId"]')
+        button_time.click()
+        open_calendar = self.browser.find_element(By.CSS_SELECTOR, '[title="Показать календарь"]')
+        open_calendar.click()
+        button_back_in_calendar = self.browser.find_element(By.CSS_SELECTOR, '[title="<Пред"]')
+        button_back_in_calendar.click()       
+        first_date = self.browser.find_element(By.CSS_SELECTOR, '[class="ui-state-default"]')
+        first_date.click()       
+        #time_start = self.browser.find_element(By.CSS_SELECTOR, '[ng-disabled="isDisabled"]')              
+        #time_start.clear()        
+        #time_start.send_keys("01.04.2021 00:00:00")
+        button_time_select = self.browser.find_element(By.CSS_SELECTOR, '[title="Применить временный диапазон"]')
+        button_time_select.click()
+        time.sleep(3)        
+        assert self.is_element_present(By.CSS_SELECTOR, '[class="info-cell-first-column"]'), "Страница не загрузилась после изменения временного диапазона"
+        new_namber_event = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]').text
+        assert int(old_namber_event) < int(new_namber_event), 'Количество событий не изменилось'
+
         
-
-
-
-
-
-
 
 
 

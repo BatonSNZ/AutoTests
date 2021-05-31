@@ -1,5 +1,8 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 import os
 
 class BasePage():
@@ -17,6 +20,14 @@ class BasePage():
         except (NoSuchElementException):
            return False
         return True 
+
+    def is_element_no_present(self, how, what):
+        try:
+            WebDriverWait(self.browser, 1).until(EC.NoSuchElementException((how, what)))
+          #  self.browser.find_element(how, what)
+        except:
+           return True
+        return False     
 
     def check_atribut_text(self, element, attribute_name, text):
         if element.get_attribute(attribute_name) == text:   
