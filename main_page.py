@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 class MainPage(BasePage):
-    def in_to_login(self): #Авторизация
+    def in_to_login(self): #Авторизация sam
         username_fild = self.browser.find_element(By.ID, 'txtUserName')
         username_fild.clear()
         username_fild.send_keys("sam")
@@ -14,8 +14,31 @@ class MainPage(BasePage):
         enter_button = self.browser.find_element(By.CLASS_NAME, 'btn-login')
         enter_button.click()
 
+    def in_to_login_dev(self): #Авторизация dev
+        username_fild = self.browser.find_element(By.ID, 'txtUserName')
+        username_fild.clear()
+        username_fild.send_keys("dev\\dev")
+        password_fild = self.browser.find_element(By.ID, 'txtPassword')
+        password_fild.clear()
+        password_fild.send_keys("Gfhjkm123")
+        enter_button = self.browser.find_element(By.CLASS_NAME, 'btn-login')
+        enter_button.click()
+
+    def in_to_login_sokol(self): #Авторизация sokol
+        username_fild = self.browser.find_element(By.ID, 'txtUserName')
+        username_fild.clear()
+        username_fild.send_keys("sokol")
+        password_fild = self.browser.find_element(By.ID, 'txtPassword')
+        password_fild.clear()
+        password_fild.send_keys("sokol")
+        enter_button = self.browser.find_element(By.CLASS_NAME, 'btn-login')
+        enter_button.click()     
+
     def should_be_start_page(self): #Проверка аторизации
-        assert self.is_element_present(By.XPATH, '//a[text()="TL"]'), "Не авторизовался"    
+        assert self.is_element_present(By.XPATH, '//a[text()="TL"]'), "Не авторизовался" 
+
+    def check_limit_rights_on_start_page(self): # Проверка ограничений прав на главной странице
+        assert self.is_element_no_present(By.XPATH, '//a[text()="Bugs"]'), "Не работают ограничения прав доступа на главной странице"       
 
     def open_tl(self): #Открытие TL        
         tl_button = self.browser.find_element(By.XPATH, '//a[text()="TL"]')
@@ -316,7 +339,7 @@ class MainPage(BasePage):
         changes_settings_messege = self.browser.find_element(By.CSS_SELECTOR, '#toast-container .toast.toast-success .toast-message')
         assert self.check_text(changes_settings_messege, 'Настройки области просмотра успешно изменены'), 'Ошибка при изменении настроек страниц'
 
-    def check_number_page(self):        
+    def check_number_page(self): # Проверка пейджинга в TL       
         assert self.is_element_present(By.CSS_SELECTOR, '[title="Вернуться на первую страницу"]'), 'Нет кнопки Вернуться на первую страницу'
         assert self.is_element_present(By.CSS_SELECTOR, '[title="Перейти на предыдущую страницу"]'), 'Нет кнопки Перейти на предыдущую страницу'
         assert self.is_element_present(By.CSS_SELECTOR, '[class="k-pager-numbers k-reset"]'), 'Нет кнопок выбора страниц'
@@ -325,7 +348,7 @@ class MainPage(BasePage):
         assert self.is_element_present(By.CSS_SELECTOR, '[title="К последней странице"]'), 'Нет кнопки К последней странице'
         assert self.is_element_present(By.CSS_SELECTOR, '[class="k-pager-info k-label"]'), 'Нет поля с количеством страниц и событий'
 
-    def check_no_number_page(self):
+    def check_no_number_page(self): # Проверка отсутсвия страниц в TL
         assert self.is_element_no_present(By.CSS_SELECTOR, '[title="Вернуться на первую страницу"]'), 'Есть кнопка Вернуться на первую страницу'
         assert self.is_element_no_present(By.CSS_SELECTOR, '[title="Перейти на предыдущую страницу"]'), 'Есть кнопка Перейти на предыдущую страницу'
         assert self.is_element_no_present(By.CSS_SELECTOR, '[class="k-pager-numbers k-reset"]'), 'Есть кнопка выбора страниц'
@@ -334,7 +357,7 @@ class MainPage(BasePage):
         assert self.is_element_no_present(By.CSS_SELECTOR, '[title="К последней странице"]'), 'Есть кнопка К последней странице'
         assert self.is_element_present(By.CSS_SELECTOR, '[class="k-pager-info k-label"]'), 'Нет поля с количеством событий'
 
-    def changes_time_tl(self):
+    def changes_time_tl(self): # Изменение временного диапазона и проверка изменения количества событий после фильтрации по времени в TL
         old_namber_event = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]').text
         button_time = self.browser.find_element(By.CSS_SELECTOR, '[id="isDateFilterAvaibleId"]')
         button_time.click()
@@ -354,6 +377,24 @@ class MainPage(BasePage):
         new_namber_event = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]').text
         assert int(old_namber_event) < int(new_namber_event), 'Количество событий не изменилось'
 
+    def check_limit_rights_in_menu_tl(self): # Проверка ограничения прав в меню TL
+        open_group_ilim = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-i-expand"]')
+        open_group_ilim.click()
+        time.sleep(1)
+        open_bratsk = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-i-expand"]')
+        open_bratsk.click()
+        time.sleep(1)
+        open_vspom_struktur_podrasdel = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-i-expand"]')
+        open_vspom_struktur_podrasdel.click()
+        time.sleep(1)
+        open_prvo_po_vodopod_i_ing_kommunic = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-i-expand"]')
+        open_prvo_po_vodopod_i_ing_kommunic.click()
+        time.sleep(1)
+        open_seh_ochis_sooruzh_promstokov = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-i-expand"]')
+        open_seh_ochis_sooruzh_promstokov.click()
+        time.sleep(1)
+        glavn_nasos_stan = self.browser.find_elements(By.CSS_SELECTOR, '[class="tl-item-table-second-cell"]')
+        assert self.check_text(glavn_nasos_stan[5], 'Главная насосная станция'), 'Нет ограничений в модели TL'
         
 
 

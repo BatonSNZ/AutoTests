@@ -24,7 +24,6 @@ class BasePage():
     def is_element_no_present(self, how, what):
         try:
             WebDriverWait(self.browser, 1).until(EC.NoSuchElementException((how, what)))
-          #  self.browser.find_element(how, what)
         except:
            return True
         return False     
