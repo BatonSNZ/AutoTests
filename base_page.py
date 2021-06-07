@@ -21,12 +21,26 @@ class BasePage():
            return False
         return True 
 
+    def is_element_present_with_waiting(self, how, what):
+        try:
+            WebDriverWait(self.browser, 10).until_not(EC.invisibility_of_element((how, what)))
+        except:
+           return False
+        return True   
+    
     def is_element_no_present(self, how, what):
         try:
             WebDriverWait(self.browser, 1).until(EC.NoSuchElementException((how, what)))
         except:
            return True
-        return False     
+        return False
+
+    def is_element_no_pressing(self, how, what):
+        try:
+            WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable((how, what)))
+        except:
+           return False
+        return True         
 
     def check_atribut_text(self, element, attribute_name, text):
         if element.get_attribute(attribute_name) == text:   
