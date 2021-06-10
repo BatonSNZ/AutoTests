@@ -17,7 +17,7 @@ def test_go_to_tl(browser): # Вход в журнал TL
     page.open_tl()                                                  #Открытие TL
     page.check_open_tl()                                            #Проверка отрытия TL 
 
-@pytest.mark.work
+
 def test_create_new_event_button(browser): # Создание события в журнале TL
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
@@ -29,7 +29,7 @@ def test_create_new_event_button(browser): # Создание события в 
     page.open_create_new_event_shablon_shablonich()                 #Открытие крточки нового события Шаблон Шаблоныч через кнопку "Создать событие"
     page.enter_data_into_event_shablon_shablonich()                 #Заполнение карточки события Шаблон Шаблоныч
 
-@pytest.mark.work
+
 def test_create_new_event_menu(browser): # Создание события через элемент структурной модели
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)

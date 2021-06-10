@@ -294,10 +294,8 @@ class MainPage(BasePage):
         time.sleep(1)
         assert self.is_element_present(By.CSS_SELECTOR, '[class="info-cell-first-column"]'), "TL не обновился"        
 
-    def check_filter_event_menu(self): # Проверка фильрации событий по группе объектов        
-        namber_event = self.browser.find_element(By.CSS_SELECTOR, '.k-pager-info.k-label')
-        name_event = self.browser.find_elements(By.CSS_SELECTOR, '.table-structure-line div span span')
-        #assert self.check_text(namber_event, '1-1 из 1'), "Не одно событие на странице"
+    def check_filter_event_menu(self): # Проверка фильрации событий по группе объектов     
+        name_event = self.browser.find_elements(By.CSS_SELECTOR, '.table-structure-line div span span')        
         assert self.check_text(name_event[2], 'Шламовая насосная станция'), "Рабочий центр не Шламовая насосная станция"
 
     def open_settings_tl(self): # Открытие настроек TL представление простой оборудования

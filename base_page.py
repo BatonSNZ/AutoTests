@@ -23,7 +23,7 @@ class BasePage():
 
     def is_element_present_with_waiting(self, how, what):
         try:
-            WebDriverWait(self.browser, 10).until_not(EC.invisibility_of_element((how, what)))
+            WebDriverWait(self.browser, 60).until_not(EC.invisibility_of_element((how, what)))
         except:
            return False
         return True   
@@ -35,9 +35,9 @@ class BasePage():
            return True
         return False
 
-    def is_element_no_pressing(self, how, what):
+    def is_element_invisibility(self, how, what):
         try:
-            WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable((how, what)))
+            WebDriverWait(self.browser, 10).until(EC.invisibility_of_element((how, what)))
         except:
            return False
         return True         
@@ -50,6 +50,12 @@ class BasePage():
 
     def check_text(self, element, text):
         if element.text == text:   
+            return True
+        else:
+            return False
+
+    def check_text_not(self, element, text):
+        if element.text != text:   
             return True
         else:
             return False

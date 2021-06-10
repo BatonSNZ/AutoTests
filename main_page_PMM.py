@@ -1,6 +1,7 @@
 from .base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 import time
 
 class MainPagePMM(BasePage):
@@ -59,18 +60,22 @@ class MainPagePMM(BasePage):
         self.double_click(event)    
 
     def check_open_event(self): # Проверка откытия карточки события
-        assert self.is_element_present(By.CSS_SELECTOR, '[ng-click="updateEvent(eventIds)"]') and self.is_element_present(By.XPATH, '//span[text()="Значение пробития границы: "]'), "Карточка события не открывается"
+        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[ng-click="updateEvent(eventIds)"]') and self.is_element_present_with_waiting(By.XPATH, '//span[text()="Значение пробития границы: "]'), "Карточка события не открывается"
 
     def press_button_kvit(self): # Нажать на кнопку Квитировать
-        button_kvit = self.browser.find_element(By.CSS_SELECTOR, '[ng-click="updateEvent(eventIds)"]')
-        button_kvit.click()
+        button_kvit_or_close = self.browser.find_element(By.CSS_SELECTOR, '[ng-click="updateEvent(eventIds)"]')
+        button_kvit_or_close.click()
         assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[class="popup__button js-confirm-btn ng-binding popup__top-info-button-disable"]'), 'Кнопка Квитировать активна'
         button_close_form = self.browser.find_element(By.XPATH, '//a[text()="Закрыть форму"]')
         button_close_form.click()
 
     def check_kvit(self): # Проверка квитированного события в журнале
-        fnrnnnn
-
+        IsConfirmed2_Action7 = self.browser.find_elements(By.XPATH, '//td/span/span')
+        ConfirmedDate7 = self.browser.find_elements(By.XPATH, '//td/span')
+        assert self.check_text(IsConfirmed2_Action7[2], 'Да'), 'Нет данных встолбце IsConfirmed'
+        assert self.check_text(IsConfirmed2_Action7[7], 'Квитировано'), 'Нет данных встолбце Action'
+        assert self.check_text_not(ConfirmedDate7[7], '-'), 'Нет данных встолбце ConfirmedDate'
+    
     def add_comment(self): # Добавление комменария
         button_add_comment = self.browser.find_element(By.CSS_SELECTOR, '[title="Добавить комментарий"]')    
         button_add_comment.click()
@@ -88,7 +93,51 @@ class MainPagePMM(BasePage):
 
     def check_comment(self): # Проверка комментария в журнале
         field_comment = self.browser.find_elements(By.CSS_SELECTOR, '[role="gridcell"]')
-        assert self.check_text(field_comment[12], 'Администратор системы(sam) : Auto test 123 №'), 'Комментарий не виден в журнале после обновления страницы'            
+        assert self.check_text(field_comment[12], 'Администратор системы(sam) : Auto test 123 №'), 'Комментарий не виден в журнале после обновления страницы'  
+
+    def select_recomend(self): # Выбор рекомендаций
+        button_recomend = self.browser.find_elements(By.CSS_SELECTOR, '[class="recomendations-tab__arrow-cb arrow-cb"]')
+        button_recomend[0].click()
+        button_recomend[1].click()
+        button_recomend[2].click()
+        checkbox_recomend = self.browser.find_elements(By.CSS_SELECTOR, '[class="recomendations-tab__custom-cb custom-cb"]')
+        checkbox_recomend[0].click()
+        checkbox_recomend[1].click()
+        button_save_form = self.browser.find_element(By.XPATH, '//a[text()="Сохранить"]')
+        button_save_form.click()
+        time.sleep(1)
+        assert self.is_element_invisibility(By.CSS_SELECTOR, '[class="popup__save-spinner ng-hide"]'), "Не сохраняется изменения  в Рекомендациях"
+        button_close_form = self.browser.find_element(By.XPATH, '//a[text()="Закрыть форму"]')
+        button_close_form.click()
+
+    def check_save_recomend(self): # Проверка изменений во вкладке Рекомендация
+        check_button_recomend = self.browser.find_elements(By.CSS_SELECTOR, '[class="arrow-cb__input ng-pristine ng-untouched ng-valid ng-not-empty"]')
+        assert len(check_button_recomend) == 3, "Выбранно три рекомендации"
+        check_checkbox_recomend = self.browser.find_elements(By.CSS_SELECTOR, '[class="custom-cb__input ng-pristine ng-untouched ng-valid ng-not-empty"]')
+        assert len(check_checkbox_recomend) == 2, "Выбранно два чекбокса"
+
+    def open_tab_trend(self): # Открытие вкладки Тренд
+        button_open_trend = self.browser.find_element(By.CSS_SELECTOR, '[title="Тренд"]')
+        button_open_trend.click()
+        text_trend = self.browser.find_element(By.XPATH, '//p[text()="Связанные с событием тренды"]')
+        assert self.check_text(text_trend, 'Связанные с событием тренды'), "Вкладка Тренд не открылась"        
+
+    def select_trend(self): # Выбор тренда Тренд отклонения вверх
+        select_trend_otklon_up = self.browser.find_elements(By.CSS_SELECTOR, '[class="k-icon k-i-arrow-s"]')        
+        select_trend_otklon_up[1].click()        
+        select = self.browser.find_element(By.XPATH, '//li[text()="Тренд отклонения вверх"]')
+        select.click()
+        time.sleep(1)      
+
+    def check_trend(self): # Проверка тренда
+        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[class="highcharts-plot-background"]'), 'Нет тренда на графике'
+
+       
+
+
+
+
+
 
     
 
