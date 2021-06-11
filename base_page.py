@@ -1,3 +1,4 @@
+import time
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
@@ -34,6 +35,12 @@ class BasePage():
         except:
            return True
         return False
+
+    def is_element_text_wating(self, element, text):
+        while element.text != text:   
+            time.sleep(1)
+        else:
+            return True
 
     def is_element_invisibility(self, how, what):
         try:
@@ -76,4 +83,17 @@ class BasePage():
         file_path = os.path.join(current_dir, file)
         return file_path
 
-    
+    def check_list_no_eq(self, list, long, number):
+        i = 0
+        while i != long:
+            if list[i].text != number:   
+                i += 1  
+                return True          
+            else:
+                return False            
+        
+            
+        
+
+
+        

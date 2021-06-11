@@ -129,12 +129,60 @@ class MainPagePMM(BasePage):
         select.click()
         time.sleep(1)      
 
-    def check_trend(self): # Проверка тренда
-        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[class="highcharts-plot-background"]'), 'Нет тренда на графике'
+    #def check_trend(self): # Проверка тренда
+        #assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[class="highcharts-plot-background"]'), 'Нет тренда на графике'
 
-       
+    def open_tab_doc(self): # Открытие вкладки Документы
+        button_open_doc = self.browser.find_element(By.CSS_SELECTOR, '[title="Документы"]')
+        button_open_doc.click()   
+        text_doc = self.browser.find_element(By.XPATH, '//p[text()="Связанные с событием документы"]')
+        assert self.check_text(text_doc, 'Связанные с событием документы'), "Вкладка Документы не открылась"
+        
+    def add_doc(self): # Добавление документа
+        button_add_invest = self.browser.find_element(By.CSS_SELECTOR, '[title="Добавить вложение"]')
+        button_add_invest.click()
+        button_select_file = self.browser.find_elements(By.CSS_SELECTOR, '[type="file"]')
+        button_select_file[1].send_keys(self.enter_file('for_auto_test.txt'))
+        enter_comment = self.browser.find_element(By.CSS_SELECTOR, '[placeholder="введите комментарий"]')
+        enter_comment.clear()
+        enter_comment.send_keys("Comment Комментарий №123")
+        button_save = self.browser.find_elements(By.CSS_SELECTOR, '.modal-button.pull-right .ui-button-text')
+        button_save[0].click()        
+        name_doc = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.name"]')
+        description_doc = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.description"]')
+        assert self.check_text(name_doc[2], 'for_auto_test.txt') and self.check_text(description_doc[2], 'Comment Комментарий №123'), 'Документ не добавился'
+
+    def check_doc(self): # Проверка наличия нового документа после обновления страницы  
+        name_doc = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.name"]')
+        description_doc = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.description"]')
+        assert self.check_text(name_doc[2], 'for_auto_test.txt') and self.check_text(description_doc[2], 'Comment Комментарий №123'), 'Документ не добавился'
+
+    def open_tab_stat(self): # Открытие вкладки Статистика
+        button_open_stat = self.browser.find_element(By.CSS_SELECTOR, '[title="Статистика"]')
+        button_open_stat.click()   
+        text_stat = self.browser.find_element(By.XPATH, '//p[text()="Статистика событий"]')
+        assert self.check_text(text_stat, 'Статистика событий'), "Вкладка Статистика не открылась" 
+
+    def filter(self): # Фитльтрация по "Активны", "Завершены", "Квитированные" и "Неквитированные"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        number_filter[0].click()
+        self.is_element_text_wating(number_filter[1], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(active) == int(kvit) + int(no_kvit), 'Сумма Квит и Неквит не равна Активным'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_no_eq(status_code, long_list, '1'), 'В журнале есть события со статусом 1'
 
 
+          
 
 
 
