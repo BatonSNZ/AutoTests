@@ -135,8 +135,8 @@ def test_statistika(browser): # Вкладка Статистика
     page.check_open_event()                                         #Проверка открытия карточки события
     page.open_tab_stat()                                            #Открытие вкладки Статистика
 
-@pytest.mark.work
-def test_filtrs(browser): # Фильтры "Активны", "Завершены", "Квитированные" и "Неквитированные"
+
+def test_filtrs_act_cvit(browser): # Фильтрация по "Активны" + "Квитированные" 
     link = "http://192.168.36.28:8093"
     page = MainPagePMM(browser, link)
     page.open()
@@ -145,6 +145,91 @@ def test_filtrs(browser): # Фильтры "Активны", "Завершены
     page.open_pmm()                                                 #Открытие PMM
     page.select_predstavlenie()                                     #Выбор режима
     page.check_open_pmm()                                           #Проверка отрытия PMM 
-    page.filter()                                                   #Фильтрация
+    page.filter_act_cvit()                                          #Фильтрация по "Активны" + "Квитированные"
+
+
+def test_filtrs_act_nocvit(browser): # Фильтрация по "Активны" + "Неквитированные"
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM 
+    page.filter_act_nocvit()                                        #Фильтрация по "Активны" + "Неквитированные"
+
+
+def test_filtrs_noact_cvit(browser): # Фильтрация по "Завершены" + "Квитированные" 
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM 
+    page.filter_noact_cvit()                                        #Фильтрация по "Завершены" + "Квитированные"    
+
+
+def test_filtrs_noact_nocvit(browser): # Фильтрация по "Завершены" + "Неквитированные"
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM 
+    page.filter_noact_nocvit()                                      #Фильтрация по "Завершены" + "Неквитированные"
+
+
+def test_filters_cvit_act(browser): # Фильтрация по "Квитированные" + "Активны" 
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM 
+    page.filter_cvit_act()                                          #Фильтрация по "Квитированные" + "Активны"
+
+
+def test_filters_cvit_noact(browser): # Фильтрация по "Квитированные" + "Завершены" 
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM 
+    page.filter_cvit_noact()                                        #Фильтрация по "Квитированные" + "Завершены"    
+
+
+def test_filters_nocvit_act(browser): # Фильтрация по "Неквитированные" + "Активны" 
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM 
+    page.filter_nocvit_act()                                        #Фильтрация по "Неквитированные" + "Активны" 
+
+@pytest.mark.work
+def test_filters_nocvit_noact(browser): # Фильтрация по "Неквитированные" + "Завершены" 
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM 
+    page.filter_nocvit_noact()                                      #Фильтрация по "Неквитированные" + "Завершены"          
+
 
 

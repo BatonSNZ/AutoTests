@@ -83,14 +83,37 @@ class BasePage():
         file_path = os.path.join(current_dir, file)
         return file_path
 
-    def check_list_no_eq(self, list, long, number):
+    def check_list_eq(self, list, long, text):
         i = 0
-        while i != long:
-            if list[i].text != number:   
+        while i < long:
+            if list[i].text == text: 
                 i += 1  
-                return True          
             else:
-                return False            
+                return False
+        else:
+                return True    
+
+    def check_list_no_eq(self, list, long, text):
+        i = 0
+        while i < long:
+            if list[i].text != text: 
+                i += 1  
+            else:
+                return False
+        else:
+                return True 
+
+    def check_list_no_eq_not_0(self, list, long, text):
+        i = 2
+        while i < long:
+            if list[i].text != text: 
+                i += 16  
+            else:
+                return False
+        else:
+                return True                    
+
+       
         
             
         

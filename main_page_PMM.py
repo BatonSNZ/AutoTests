@@ -42,8 +42,8 @@ class MainPagePMM(BasePage):
         assert self.is_element_no_present(By.XPATH, '//a[text()="Bugs"]'), "Не работают ограничения прав доступа на главной странице"       
 
     def open_pmm(self): #Открытие PMM       
-        tl_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
-        tl_button.click()
+        pmm_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
+        pmm_button.click()
 
     def select_predstavlenie(self): # Выбор представления
         select_operativ_jornal = self.browser.find_element(By.XPATH, '//span[text()="Режим оперативного журнала"]')
@@ -163,12 +163,37 @@ class MainPagePMM(BasePage):
         text_stat = self.browser.find_element(By.XPATH, '//p[text()="Статистика событий"]')
         assert self.check_text(text_stat, 'Статистика событий'), "Вкладка Статистика не открылась" 
 
-    def filter(self): # Фитльтрация по "Активны", "Завершены", "Квитированные" и "Неквитированные"
+    def filter_act_cvit(self): # Фильтрация по "Активны" + "Квитированные"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')
+        number_filter[0].click()         
+        self.is_element_text_wating(number_filter[1], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(active) == int(kvit) + int(no_kvit), 'Сумма Квит и Неквит не равна Активным'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_no_eq(status_code, long_list, '1'), 'В журнале есть события со статусом 1'
+        number_filter[2].click()
+        self.is_element_text_wating(number_filter[3], '0')
         number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
         active = number_filter[0].text
         no_active = number_filter[1].text
         kvit = number_filter[2].text
         no_kvit = number_filter[3].text
+        assert int(active) == int(kvit), 'Квит не равна Активным'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_no_eq(status_code, long_list, '1'), 'В журнале есть события со статусом 1'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Нет'), 'В журнале есть события со статусом квитирования Нет'
+
+
+    def filter_act_nocvit(self): # Фильтрация по "Активны" + "Неквитированные"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')         
         number_filter[0].click()
         self.is_element_text_wating(number_filter[1], '0') 
         number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
@@ -180,11 +205,188 @@ class MainPagePMM(BasePage):
         status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
         long_list = len(status_code)
         assert self.check_list_no_eq(status_code, long_list, '1'), 'В журнале есть события со статусом 1'
+        number_filter[3].click()
+        self.is_element_text_wating(number_filter[2], '0')
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        assert int(active) == int(no_kvit), 'Неквит не равна Активным'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_no_eq(status_code, long_list, '1'), 'В журнале есть события со статусом 1'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Да'), 'В журнале есть события со статусом квитирования Да'
 
+    def filter_noact_cvit(self): # Фильтрация по "Завершены" + "Квитированные"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')         
+        number_filter[1].click()
+        self.is_element_text_wating(number_filter[0], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(no_active) == int(kvit) + int(no_kvit), 'Сумма Квит и Неквит не равна Завершены'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_eq(status_code, long_list, '1'), 'В журнале есть события со статусом не 1'
+        number_filter[2].click()
+        self.is_element_text_wating(number_filter[3], '0')
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        assert int(no_active) == int(kvit), 'Квит не равна Завершены'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_eq(status_code, long_list, '1'), 'В журнале есть события со статусом не 1'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Нет'), 'В журнале есть события со статусом квитирования Нет'
 
-          
+    def filter_noact_nocvit(self): # Фильтрация по "Завершены" + "Неквитированные"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')         
+        number_filter[1].click()
+        self.is_element_text_wating(number_filter[0], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(no_active) == int(kvit) + int(no_kvit), 'Сумма Квит и Неквит не равна Завершены'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_eq(status_code, long_list, '1'), 'В журнале есть события со статусом не 1'
+        number_filter[3].click()
+        self.is_element_text_wating(number_filter[2], '0')
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        assert int(no_active) == int(no_kvit), 'Неквит не равна Завершены'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_eq(status_code, long_list, '1'), 'В журнале есть события со статусом не 1'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Да'), 'В журнале есть события со статусом квитирования Да'   
 
+    def filter_cvit_act(self): # Фильтрация по "Квитированные" + "Активны"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')
+        number_filter[2].click()         
+        self.is_element_text_wating(number_filter[3], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(kvit) == int(active) + int(no_active), 'Сумма Активные и Завершены не равна Квит'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Нет'), 'В журнале есть события со статусом квитирования Нет'
+        number_filter[0].click()
+        self.is_element_text_wating(number_filter[1], '0')
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        assert int(active) == int(kvit), 'Квит не равна Активным'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Нет'), 'В журнале есть события со статусом квитирования Нет'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_no_eq(status_code, long_list, '1'), 'В журнале есть события со статусом 1'
 
+    def filter_cvit_noact(self): # Фильтрация по "Квитированные" + "Завершены"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')
+        number_filter[2].click()         
+        self.is_element_text_wating(number_filter[3], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(kvit) == int(active) + int(no_active), 'Сумма Активные и Завершены не равна Квит'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Нет'), 'В журнале есть события со статусом квитирования Нет'
+        number_filter[1].click()
+        self.is_element_text_wating(number_filter[0], '0')
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        assert int(no_active) == int(kvit), 'Квит не равна Активным'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Нет'), 'В журнале есть события со статусом квитирования Нет'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_eq(status_code, long_list, '1'), 'В журнале есть события со статусом не 1'             
+
+    def filter_nocvit_act(self): # Фильтрация по "Неквитированные" + "Активны"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')
+        number_filter[3].click()         
+        self.is_element_text_wating(number_filter[2], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(no_kvit) == int(active) + int(no_active), 'Сумма Активные и Завершены не равна Неквит'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Да'), 'В журнале есть события со статусом квитирования Нет'
+        number_filter[0].click()
+        self.is_element_text_wating(number_filter[1], '0')
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        assert int(active) == int(no_kvit), 'Неквит не равна Активным'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Да'), 'В журнале есть события со статусом квитирования Нет'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_no_eq(status_code, long_list, '1'), 'В журнале есть события со статусом 1'      
+
+    def filter_nocvit_noact(self): # Фильтрация по "Неквитированные" + "Завершены"
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')
+        number_filter[3].click()         
+        self.is_element_text_wating(number_filter[2], '0') 
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text       
+        assert int(no_kvit) == int(active) + int(no_active), 'Сумма Активные и Завершены не равна Квит'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Да'), 'В журнале есть события со статусом квитирования Нет'
+        number_filter[1].click()
+        self.is_element_text_wating(number_filter[0], '0')
+        number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        active = number_filter[0].text
+        no_active = number_filter[1].text
+        kvit = number_filter[2].text
+        no_kvit = number_filter[3].text
+        assert int(no_active) == int(no_kvit), 'Неквит не равна Активным'
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_no_eq_not_0(IsConfirmed, long_list, 'Да'), 'В журнале есть события со статусом квитирования Нет'
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_eq(status_code, long_list, '1'), 'В журнале есть события со статусом не 1'
 
 
     
