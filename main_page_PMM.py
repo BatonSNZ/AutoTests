@@ -163,6 +163,51 @@ class MainPagePMM(BasePage):
         text_stat = self.browser.find_element(By.XPATH, '//p[text()="Статистика событий"]')
         assert self.check_text(text_stat, 'Статистика событий'), "Вкладка Статистика не открылась" 
 
+    def filter_for_model_proizvodsva(self): # Фильтрация по модели производства        
+        open_model = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-plus"]')
+        open_model.click()
+        time.sleep(1)
+        open_model = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-plus"]')
+        open_model.click()
+        time.sleep(1)
+        model_proizvodsva = self.browser.find_elements(By.CSS_SELECTOR, '[class="k-in ng-binding"]')
+        model_proizvodsva[2].click()
+        time.sleep(1)
+        filter_menu = self.browser.find_element(By.CSS_SELECTOR, '[title="Показать события в таблице"]')
+        filter_menu.click()
+        number_page = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]')
+        assert self.is_element_no_text_wating(number_page, number_page.text), 'Колличество событий на странице не изменилось'
+        name_model_proizvodsva = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.ObservableObject"]')
+        lond_list = len(name_model_proizvodsva)
+        assert self.check_list_eq(name_model_proizvodsva, lond_list, 'Белизна, %'), 'Есть события не из Белизна, %'
+
+    def check_rights_PMM(self): # Проверка ограничения прав доступа в PMM
+        open_model = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-plus"]')
+        open_model.click()
+        time.sleep(1)
+        open_model = self.browser.find_element(By.CSS_SELECTOR, '[class="k-icon k-plus"]')
+        open_model.click()
+        time.sleep(1)
+        model_proizvodsva = self.browser.find_elements(By.CSS_SELECTOR, '[class="k-in ng-binding"]')
+        assert self.check_text(model_proizvodsva[2], 'Гидромодуль в Impbin'), 'Первый элемент в меню не Гидромодуль в Impbin'
+
+    def time_filter(self): # Фильтрация по времени в журнале PMM
+        start_date = self.browser.find_element(By.CSS_SELECTOR, '[id="startDatePicker"]')
+        start_date.clear()        
+        for i in range(16):
+            start_date.send_keys(Keys.BACKSPACE)        
+        start_date.send_keys("18.04.2021 14:40")
+        start_time_filter = self.browser.find_element(By.CSS_SELECTOR, '[title="применить временной диапазон"]')
+        start_time_filter.click()
+        number_page = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]')
+        assert self.is_element_no_text_wating(number_page, number_page.text), 'Колличество событий на странице не изменилось'
+        
+     
+
+
+
+
+
     def filter_act_cvit(self): # Фильтрация по "Активны" + "Квитированные"
         number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')
         number_filter[0].click()         

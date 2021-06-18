@@ -42,6 +42,12 @@ class BasePage():
         else:
             return True
 
+    def is_element_no_text_wating(self, element, text):
+        while element.text == text:   
+            time.sleep(1)
+        else:
+            return True        
+
     def is_element_invisibility(self, how, what):
         try:
             WebDriverWait(self.browser, 10).until(EC.invisibility_of_element((how, what)))
