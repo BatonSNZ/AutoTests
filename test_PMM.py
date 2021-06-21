@@ -160,7 +160,7 @@ def test_check_rights(browser): # Проверка прав доступа в PM
     page.check_open_pmm()                                           #Проверка отрытия PMM 
     page.check_rights_PMM()                                         #Проверка ограничения прав доступа в PMM
 
-@pytest.mark.work
+
 def test_filter_for_time(browser): # Фильтрация по времени
     link = "http://192.168.36.28:8093"
     page = MainPagePMM(browser, link)
@@ -171,6 +171,23 @@ def test_filter_for_time(browser): # Фильтрация по времени
     page.select_predstavlenie()                                     #Выбор режима
     page.check_open_pmm()                                           #Проверка отрытия PMM
     page.time_filter()                                              #Фильтрация по времени в журнале PMM
+
+@pytest.mark.work
+def test_change_namder_event_page(browser): # Изменение количества событий на странице
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM
+    page.change_namder_event()                                      #Изменение чилса событий на странице
+    page.change_namber_event_after_test()                           #Возвращение 20 событий на странице
+
+
+
+
 
 
 def test_filtrs_act_cvit(browser): # Фильтрация по "Активны" + "Квитированные" 

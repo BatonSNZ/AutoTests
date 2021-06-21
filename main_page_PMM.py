@@ -202,6 +202,47 @@ class MainPagePMM(BasePage):
         number_page = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]')
         assert self.is_element_no_text_wating(number_page, number_page.text), 'Колличество событий на странице не изменилось'
         
+    def change_namder_event(self): # Изменение числа событий на странице
+        namber_event_before = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]')
+        text_namber_event_before = namber_event_before.text        
+        list_posible = self.browser.find_element(By.CSS_SELECTOR, '[title="Список возможностей"]')
+        list_posible.click()
+        settings_menu = self.browser.find_element(By.CSS_SELECTOR, '.settings-menu-link')
+        settings_menu.click()
+        settings_pmm = self.browser.find_element(By.CSS_SELECTOR, '[title="КТР"]')
+        settings_pmm.click()
+        change_nmber_event = self.browser.find_element(By.CSS_SELECTOR, '[id="events-count-on-page"]')
+        change_nmber_event.clear() 
+        change_nmber_event.send_keys("10")                    
+        pmm_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
+        pmm_button.click()                   
+        assert self.is_element_present_with_waiting(By.XPATH, '//span[text()="Неквитированные"]'), "Нет кнопки неквитировано"
+        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[style="background: rgb(255, 216, 0);"'), "Нет событий в PMM"
+        namber_event = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.Action"]')
+        namber_event_after = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]')
+        assert len(namber_event) == 10, "Не совпадает колличество событий на странице"
+        assert text_namber_event_before != namber_event_after.text, "Не изменилось количество событий в нижней части журнала"
+
+    def change_namber_event_after_test(self): # Возвращение 20 событий на странице   
+        list_posible = self.browser.find_element(By.CSS_SELECTOR, '[title="Список возможностей"]')
+        list_posible.click()
+        settings_menu = self.browser.find_element(By.CSS_SELECTOR, '.settings-menu-link')
+        settings_menu.click()
+        settings_pmm = self.browser.find_element(By.CSS_SELECTOR, '[title="КТР"]')
+        settings_pmm.click()
+        change_nmber_event = self.browser.find_element(By.CSS_SELECTOR, '[id="events-count-on-page"]')
+        change_nmber_event.clear() 
+        change_nmber_event.send_keys("20") 
+        pmm_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
+        pmm_button.click()                   
+        assert self.is_element_present_with_waiting(By.XPATH, '//span[text()="Неквитированные"]'), "Нет кнопки неквитировано"
+        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[style="background: rgb(255, 216, 0);"'), "Нет событий в PMM"
+        namber_event = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.Action"]')        
+        assert len(namber_event) == 20, "Не совпадает колличество событий на странице"
+
+
+
+
      
 
 
