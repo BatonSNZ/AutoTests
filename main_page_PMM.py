@@ -240,6 +240,72 @@ class MainPagePMM(BasePage):
         namber_event = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.Action"]')        
         assert len(namber_event) == 20, "Не совпадает колличество событий на странице"
 
+    def sort_kvit(self): # Фильтрация по признаку квитирования
+        namder_event = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]') 
+        namder_event_kvit = namder_event[2].text
+        namder_event_nokvit = namder_event[3].text
+        namder_event_int = int(namder_event_kvit) + int(namder_event_nokvit)
+        list_posible = self.browser.find_element(By.CSS_SELECTOR, '[title="Список возможностей"]')
+        list_posible.click()
+        settings_menu = self.browser.find_element(By.CSS_SELECTOR, '.settings-menu-link')
+        settings_menu.click()
+        settings_pmm = self.browser.find_element(By.CSS_SELECTOR, '[title="КТР"]')
+        settings_pmm.click()
+        change_namber_event = self.browser.find_element(By.CSS_SELECTOR, '[id="events-count-on-page"]')
+        change_namber_event.clear() 
+        change_namber_event.send_keys(namder_event_int)
+        filter_kvit = self.browser.find_element(By.CSS_SELECTOR, '[for="mainSetting_IsConfirmed"]')
+        filter_kvit.click()
+        filter_kvit.click()        
+        check_change = self.browser.find_element(By.CSS_SELECTOR, '[class="header-main-top-title"]')
+        assert self.is_element_no_text_wating(check_change, 'Настройки.Основные'), "Не нажался чекбокс фильтрации по признаку квитирования"        
+        pmm_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
+        pmm_button.click()                   
+        assert self.is_element_present_with_waiting(By.XPATH, '//span[text()="Неквитированные"]'), "Нет кнопки неквитировано"
+        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[style="background: rgb(255, 216, 0);"'), "Нет событий в PMM"
+        IsConfirmed = self.browser.find_elements(By.XPATH, '//td/span/span')
+        long_list = len(IsConfirmed)
+        assert self.check_list_for_kvit(IsConfirmed, long_list, int(namder_event_kvit), int(namder_event_nokvit), 'Да', 'Нет'), 'В журнале не работает сортировака по признаку квитирования'
+
+    def sort_status(self): # Фильтрация по статусу события
+        list_posible = self.browser.find_element(By.CSS_SELECTOR, '[title="Список возможностей"]')
+        list_posible.click()
+        settings_menu = self.browser.find_element(By.CSS_SELECTOR, '.settings-menu-link')
+        settings_menu.click()
+        settings_pmm = self.browser.find_element(By.CSS_SELECTOR, '[title="КТР"]')
+        settings_pmm.click()
+        filter_status = self.browser.find_element(By.CSS_SELECTOR, '[for="mainSetting_StatusCode"]')
+        filter_status.click()
+        check_change = self.browser.find_element(By.CSS_SELECTOR, '[class="header-main-top-title"]')
+        assert self.is_element_no_text_wating(check_change, 'Настройки.Основные'), "Не нажался чекбокс фильтрации по признаку квитирования"        
+        pmm_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
+        pmm_button.click()                   
+        assert self.is_element_present_with_waiting(By.XPATH, '//span[text()="Неквитированные"]'), "Нет кнопки неквитировано"
+        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[style="background: rgb(255, 216, 0);"'), "Нет событий в PMM"
+        status_code = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.StatusCode"]')
+        long_list = len(status_code)
+        assert self.check_list_for_status_code(status_code, long_list), 'В журнале нет сортировки по статус коду'
+
+    def sort_time(self): # Фильтрация по времени начала события
+        list_posible = self.browser.find_element(By.CSS_SELECTOR, '[title="Список возможностей"]')
+        list_posible.click()
+        settings_menu = self.browser.find_element(By.CSS_SELECTOR, '.settings-menu-link')
+        settings_menu.click()
+        settings_pmm = self.browser.find_element(By.CSS_SELECTOR, '[title="КТР"]')
+        settings_pmm.click()
+        filter_time = self.browser.find_element(By.CSS_SELECTOR, '[for="mainSetting_StartDate"]')
+        filter_time.click()
+        check_change = self.browser.find_element(By.CSS_SELECTOR, '[class="header-main-top-title"]')
+        assert self.is_element_no_text_wating(check_change, 'Настройки.Основные'), "Не нажался чекбокс фильтрации по признаку квитирования"        
+        pmm_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
+        pmm_button.click()                   
+        assert self.is_element_present_with_waiting(By.XPATH, '//span[text()="Неквитированные"]'), "Нет кнопки неквитировано"
+        assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[style="background: rgb(255, 216, 0);"'), "Нет событий в PMM"
+        start_date = self.browser.find_elements(By.XPATH, '//td/span')
+        long_list = len(start_date)
+        assert self.check_list_start_date(start_date, long_list), "Нет сортировки по времени начала"
+
+    
 
 
 

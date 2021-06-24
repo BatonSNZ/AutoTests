@@ -3,6 +3,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from datetime import datetime
 
 import os
 
@@ -117,7 +118,57 @@ class BasePage():
             else:
                 return False
         else:
-                return True                    
+                return True     
+
+    def check_list_for_kvit(self, list, long, namber1, namber2, text1, text2):
+        i = 2
+        j = 0
+        g = 0
+        while i < long:
+            while j != namber1:
+                if list[i].text == text1: 
+                    i += 16
+                    j += 1  
+                else:
+                    return False
+            while g != namber2:
+                if list[i].text == text2: 
+                    i += 16  
+                    g += 1
+                else:
+                    return False        
+        else:
+            return True
+
+    def check_list_for_status_code(self, list, long):
+        i = 0
+        while i < long - 1:
+            if int(list[i].text) >= int(list[i+1].text): 
+                i += 1  
+            else:
+                return False
+        else:
+                return True   
+
+    def check_list_start_date(self, list, long):
+        i = 3 
+        j = 0       
+        list_date = []
+        while i < long:            
+            list_date.append(datetime.strptime(list[i].text, "%d.%m.%Y %H:%M:%S"))
+            i += 23
+        while j < len(list_date) - 1:
+            if list_date[j] >= list_date[j + 1]: 
+                j += 1  
+            else:
+                return False
+        else:
+                return True              
+           
+
+             
+
+                   
 
        
         

@@ -84,7 +84,7 @@ def test_recomend(browser): # Вкладка Рекомендации
     page.check_open_event()                                         #Проверка открытия карточки события
     page.check_save_recomend()                                      #Проверка сохранения изменений во вкладке Рекомендации 
 
-
+@pytest.mark.work
 def test_trend(browser): # Вкладка Тренд
     link = "http://192.168.36.28:8093"
     page = MainPagePMM(browser, link)
@@ -172,7 +172,7 @@ def test_filter_for_time(browser): # Фильтрация по времени
     page.check_open_pmm()                                           #Проверка отрытия PMM
     page.time_filter()                                              #Фильтрация по времени в журнале PMM
 
-@pytest.mark.work
+
 def test_change_namder_event_page(browser): # Изменение количества событий на странице
     link = "http://192.168.36.28:8093"
     page = MainPagePMM(browser, link)
@@ -185,6 +185,20 @@ def test_change_namder_event_page(browser): # Изменение количес�
     page.change_namder_event()                                      #Изменение чилса событий на странице
     page.change_namber_event_after_test()                           #Возвращение 20 событий на странице
 
+
+def test_sort_event(browser): # Сортировака событий в настройках
+    link = "http://192.168.36.28:8093"
+    page = MainPagePMM(browser, link)
+    page.open()
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_pmm()                                                 #Открытие PMM
+    page.select_predstavlenie()                                     #Выбор режима
+    page.check_open_pmm()                                           #Проверка отрытия PMM
+    page.sort_kvit()                                                #Фильтрация по признаку квитирования
+    page.sort_status()                                              #Фильтрация по статусу события
+    page.sort_time()                                                #Фильтрация по времени начала
+    page.change_namber_event_after_test()                           #Вернуть количество страниц
 
 
 
