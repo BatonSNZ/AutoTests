@@ -98,8 +98,7 @@ def test_trend(browser): # Вкладка Тренд
     page.check_open_event()                                         #Проверка открытия карточки события
     page.open_tab_trend()                                           #Открытие вкладки Тренд
     page.select_trend()                                             #Выбор Тренд отклонения вверх
-    #page.check_trend()                                              #Прверка тренда
-
+    
 
 def test_doc(browser): # Вкладка Документы
     link = "http://192.168.36.28:8093"

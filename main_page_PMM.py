@@ -120,17 +120,22 @@ class MainPagePMM(BasePage):
         button_open_trend = self.browser.find_element(By.CSS_SELECTOR, '[title="Тренд"]')
         button_open_trend.click()
         text_trend = self.browser.find_element(By.XPATH, '//p[text()="Связанные с событием тренды"]')
-        assert self.check_text(text_trend, 'Связанные с событием тренды'), "Вкладка Тренд не открылась"        
+        assert self.is_element_text_wating(text_trend, 'Связанные с событием тренды'), "Вкладка Тренд не открылась"        
 
     def select_trend(self): # Выбор тренда Тренд отклонения вверх
         select_trend_otklon_up = self.browser.find_elements(By.CSS_SELECTOR, '[class="k-icon k-i-arrow-s"]')        
-        select_trend_otklon_up[1].click()        
+        select_trend_otklon_up[1].click()
+        time.sleep(1)        
         select = self.browser.find_element(By.XPATH, '//li[text()="Тренд отклонения вверх"]')
-        select.click()
-        time.sleep(1)      
-
-    #def check_trend(self): # Проверка тренда
-        #assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[class="highcharts-plot-background"]'), 'Нет тренда на графике'
+        select.click() 
+        time.sleep(1) 
+        trend_button = self.browser.find_element(By.CSS_SELECTOR, '[class="goToTrendButton popup__control popup__button"]')
+        trend_button.click()
+        new_window = self.browser.window_handles[1]
+        self.browser.switch_to.window(new_window)
+        time.sleep(1)                 
+        assert self.is_element_present(By.CSS_SELECTOR, '[class="highcharts-graph"]'), "Не открылся тренд отклонения вверх"        
+        time.sleep(1)            
 
     def open_tab_doc(self): # Открытие вкладки Документы
         button_open_doc = self.browser.find_element(By.CSS_SELECTOR, '[title="Документы"]')

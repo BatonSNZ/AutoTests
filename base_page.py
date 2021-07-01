@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 
 class BasePage():
-    def __init__(self, browser, url, timeout=10):
+    def __init__(self, browser, url, timeout=30):
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
@@ -28,7 +28,14 @@ class BasePage():
             WebDriverWait(self.browser, 60).until_not(EC.invisibility_of_element((how, what)))
         except:
            return False
-        return True   
+        return True
+
+    def is_element_no_present_waiting(self, how, what):
+        try:
+            WebDriverWait(self.browser, 60).until(EC.invisibility_of_element((how, what)))
+        except:
+           return False
+        return True     
     
     def is_element_no_present(self, how, what):
         try:
