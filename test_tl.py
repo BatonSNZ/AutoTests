@@ -120,7 +120,7 @@ def test_delete_event(browser): # Удаление события в журна�
     page.refresh_page()                                             #Обновление страницы
     page.delete_event()                                             #Удаление события через карточку события
 
-
+@pytest.mark.work
 def test_filter_menu(browser): # Фильтрация событий по группе объектов
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)
@@ -149,7 +149,7 @@ def test_pages(browser): # Пейджинг
     page.check_open_tl()                                            #Проверка отрытия TL
     page.check_no_number_page()                                     #Проверка отсутствия страниц
 
-
+@pytest.mark.work
 def test_filter_time(browser): # Фильтрация по времени
     link = "http://192.168.36.28:8093"
     page = MainPage(browser, link)

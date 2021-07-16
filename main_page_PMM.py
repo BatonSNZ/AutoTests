@@ -131,6 +131,7 @@ class MainPagePMM(BasePage):
         time.sleep(1) 
         trend_button = self.browser.find_element(By.CSS_SELECTOR, '[class="goToTrendButton popup__control popup__button"]')
         trend_button.click()
+        time.sleep(1)
         new_window = self.browser.window_handles[1]
         self.browser.switch_to.window(new_window)
         time.sleep(1)                 

@@ -16,28 +16,28 @@ class BasePage():
     def open(self):
         self.browser.get(self.url)
 
-    def is_element_present(self, how, what):
+    def is_element_present(self, how, what): # Элемент есть
         try:
            self.browser.find_element(how, what)
         except (NoSuchElementException):
            return False
         return True 
 
-    def is_element_present_with_waiting(self, how, what):
+    def is_element_present_with_waiting(self, how, what): # Элемент есть с ожиданием
         try:
             WebDriverWait(self.browser, 60).until_not(EC.invisibility_of_element((how, what)))
         except:
            return False
         return True
 
-    def is_element_no_present_waiting(self, how, what):
+    def is_element_no_present_waiting(self, how, what): # Элемента не видно с ожиданием
         try:
             WebDriverWait(self.browser, 60).until(EC.invisibility_of_element((how, what)))
         except:
            return False
         return True     
     
-    def is_element_no_present(self, how, what):
+    def is_element_no_present(self, how, what): # Элемента нет 
         try:
             WebDriverWait(self.browser, 1).until(EC.NoSuchElementException((how, what)))
         except:
@@ -170,7 +170,21 @@ class BasePage():
             else:
                 return False
         else:
-                return True              
+                return True    
+
+    def check_list_value(self, list, index_start, list_for_comparison):
+        i = 0            
+        while i < 10:           
+            if list[index_start].text == list_for_comparison[i]:                
+                i += 1
+                index_start += 1                
+            else:
+                return False
+        else:
+            return True   
+
+
+                              
            
 
              
@@ -182,5 +196,3 @@ class BasePage():
             
         
 
-
-        

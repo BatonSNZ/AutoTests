@@ -370,7 +370,8 @@ class MainPage(BasePage):
         #time_start.send_keys("01.04.2021 00:00:00")
         button_time_select = self.browser.find_element(By.CSS_SELECTOR, '[title="Применить временный диапазон"]')
         button_time_select.click()
-        time.sleep(3)        
+        assert self.is_element_present(By.CSS_SELECTOR, '[style="display: block;"]'), "Страница не обновляется после изменения временного диапазона"
+        assert self.is_element_present(By.CSS_SELECTOR, '[style="display: none;"]'), "Страница не обновляется после изменения временного диапазона"                
         assert self.is_element_present(By.CSS_SELECTOR, '[class="info-cell-first-column"]'), "Страница не загрузилась после изменения временного диапазона"
         new_namber_event = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]').text
         assert int(old_namber_event) < int(new_namber_event), 'Количество событий не изменилось'
