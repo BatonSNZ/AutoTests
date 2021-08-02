@@ -88,8 +88,10 @@ class MainPage(BasePage):
     def enter_data_into_event_prostoi_oborudovania(self): #Заполнение карточки события Простой оборудования
         work_center_selection_button = self.browser.find_element(By.CSS_SELECTOR, '[value="ВЫБРАТЬ..."]')
         work_center_selection_button.click()
+        time.sleep(1)
         open_group_ilim = self.browser.find_element(By.CSS_SELECTOR, '.modalWindow.ktp-wrapper.checkbox-wrap .ng-isolate-scope .ng-scope .atp-block .atp-content .atp-content-wrap #atp-panelbar .k-state-active.k-item.k-first.k-last.k-state-highlight .atp-treelist-wrap.k-content .atp-main-list.pmm-custom-scroll .ng-scope.ng-isolate-scope #atp-treelist .k-group.k-treeview-lines .k-item.k-first.k-last .ng-scope.k-top.k-bot .k-icon.k-i-expand')
         open_group_ilim.click()
+        time.sleep(1)
         open_bratsk = self.browser.find_element(By.CSS_SELECTOR, '.ng-scope.k-last .k-bot .k-icon.k-i-expand')
         open_bratsk.click()
         time.sleep(1)

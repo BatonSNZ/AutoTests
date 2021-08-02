@@ -10,11 +10,11 @@ import os
 class BasePage():
     def __init__(self, browser, url, timeout=30):
         self.browser = browser
-        self.url = url
+        self.url = url        
         self.browser.implicitly_wait(timeout)
 
     def open(self):
-        self.browser.get(self.url)
+        self.browser.get(self.url)        
 
     def is_element_present(self, how, what): # Элемент есть
         try:
@@ -89,6 +89,10 @@ class BasePage():
         action = ActionChains(self.browser)
         action.double_click(on_element = here).perform()
 
+    def move_cursor(self, here):       
+        action = ActionChains(self.browser)
+        action.move_to_element(here).perform()    
+
     def refresh_page(self):
         self.browser.refresh()
 
@@ -125,7 +129,17 @@ class BasePage():
             else:
                 return False
         else:
-                return True     
+                return True
+
+    def check_list_eq_through_one_not_0(self, list, long, text):
+        i = 1
+        while i < long:
+            if list[i].text == text: 
+                i += 2  
+            else:
+                return False
+        else:
+                return True                 
 
     def check_list_for_kvit(self, list, long, namber1, namber2, text1, text2):
         i = 2

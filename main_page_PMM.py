@@ -140,7 +140,8 @@ class MainPagePMM(BasePage):
 
     def open_tab_doc(self): # Открытие вкладки Документы
         button_open_doc = self.browser.find_element(By.CSS_SELECTOR, '[title="Документы"]')
-        button_open_doc.click()   
+        button_open_doc.click() 
+        time.sleep(1)  
         text_doc = self.browser.find_element(By.XPATH, '//p[text()="Связанные с событием документы"]')
         assert self.check_text(text_doc, 'Связанные с событием документы'), "Вкладка Документы не открылась"
         
@@ -219,11 +220,12 @@ class MainPagePMM(BasePage):
         settings_pmm.click()
         change_nmber_event = self.browser.find_element(By.CSS_SELECTOR, '[id="events-count-on-page"]')
         change_nmber_event.clear() 
-        change_nmber_event.send_keys("10")                    
+        change_nmber_event.send_keys("10")                          
         pmm_button = self.browser.find_element(By.XPATH, '//a[text()="KTP"]')
         pmm_button.click()                   
         assert self.is_element_present_with_waiting(By.XPATH, '//span[text()="Неквитированные"]'), "Нет кнопки неквитировано"
         assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[style="background: rgb(255, 216, 0);"'), "Нет событий в PMM"
+        time.sleep(1)
         namber_event = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.Action"]')
         namber_event_after = self.browser.find_element(By.CSS_SELECTOR, '[class="k-pager-info k-label"]')
         assert len(namber_event) == 10, "Не совпадает колличество событий на странице"
@@ -243,6 +245,7 @@ class MainPagePMM(BasePage):
         pmm_button.click()                   
         assert self.is_element_present_with_waiting(By.XPATH, '//span[text()="Неквитированные"]'), "Нет кнопки неквитировано"
         assert self.is_element_present_with_waiting(By.CSS_SELECTOR, '[style="background: rgb(255, 216, 0);"'), "Нет событий в PMM"
+        time.sleep(1)
         namber_event = self.browser.find_elements(By.CSS_SELECTOR, '[ng-bind="dataItem.eventColumn.Action"]')        
         assert len(namber_event) == 20, "Не совпадает колличество событий на странице"
 
@@ -310,16 +313,6 @@ class MainPagePMM(BasePage):
         start_date = self.browser.find_elements(By.XPATH, '//td/span')
         long_list = len(start_date)
         assert self.check_list_start_date(start_date, long_list), "Нет сортировки по времени начала"
-
-    
-
-
-
-     
-
-
-
-
 
     def filter_act_cvit(self): # Фильтрация по "Активны" + "Квитированные"
         number_filter = self.browser.find_elements(By.CSS_SELECTOR, '[class="summary-item-number ng-binding"]')
