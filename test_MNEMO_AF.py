@@ -51,7 +51,7 @@ def test_check_new_graph(browser): # Проверка Новый график
     page.check_value_load()                                         #Проверка загрузки значений value
     page.check_new_graph()                                          #Проверка Новый график  
 
-
+@pytest.mark.work
 def test_check_simple_trend(browser): # Проверка Простой тренд
     link = "http://192.168.36.28:8093"
     page = MainPageMNEMO(browser, link)
@@ -86,7 +86,7 @@ def test_check_table(browser): # Выгрузка в таблицу
     page.table_from_smart_trend()                                   #Выгрузка в таблицу через SmartTrend 
     page.table_from_new_graf()                                      #Выгрузка в таблицу через Новый график   
 
-@pytest.mark.work
+
 def test_zone_makers(browser): # Проверка работы ZoneMakers    
     link = "http://192.168.36.28:8093"
     page = MainPageMNEMO(browser, link)
@@ -96,6 +96,27 @@ def test_zone_makers(browser): # Проверка работы ZoneMakers
     page.open_mnemo_zonemaker()                                     #Открытие мнемосхемы с ZoneMakers
     page.check_zone_maker_setings_visio()                           #Проверка работы ZoneMaker с настройками Visio
     page.check_zone_maker_setings_portal()                          #Проверка работы ZoneMaker с настройками Портала
+
+
+def test_zone_makers(browser): # Проверка работы Виджетов   
+    link = "http://192.168.36.28:8093"
+    page = MainPageMNEMO(browser, link)
+    page.open()     
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_mnemo_widget()                                        #Открытие мнемосхемы с Виджет
+    page.check_widgets_layout_container()                           #Проверка работы WidgetsLayoutContainer   
+    page.check_widget_red_button()                                  #Проверка работы Виджетов
+
+
+def test_multi_state(browser): # Проверка работы MultiState   
+    link = "http://192.168.36.28:8093"
+    page = MainPageMNEMO(browser, link)
+    page.open()     
+    page.in_to_login()                                              #Авторизация на портале
+    page.should_be_start_page()                                     #Проверка автризации
+    page.open_mnemo_multi_state()                                   #Открытие мнемосхемы с MultiState
+    page.check_multi_state()                                        #Проверка работы MultiState
 
 
 

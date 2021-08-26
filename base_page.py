@@ -23,7 +23,7 @@ class BasePage():
            return False
         return True 
 
-    def is_element_present_with_waiting(self, how, what): # Элемент есть с ожиданием
+    def is_element_present_with_waiting(self, how, what): # Элемент видно с ожиданием
         try:
             WebDriverWait(self.browser, 60).until_not(EC.invisibility_of_element((how, what)))
         except:
@@ -195,7 +195,32 @@ class BasePage():
             else:
                 return False
         else:
-            return True   
+            return True
+
+    def check_list_eq_list(self, list1, list2):
+        i = 0            
+        while i < len(list1):
+            print(list1[i].text)
+            print(list2[i])
+            print(len(list1))           
+            if list1[i].text == list2[i]:                                
+                i += 1                               
+            else:
+                return False
+        else:
+            return True
+
+    def check_color_multi_state(self, value, value_multi_state, multi_state):
+        if int(value.text) > 99:
+            if value_multi_state.get_attribute('style') == 'fill: rgb(255, 0, 0);' and multi_state.get_attribute('style') == 'fill: rgb(255, 0, 0);':   
+                return True
+            else:
+                return False  
+        else:
+            if value_multi_state.get_attribute('style') == 'fill: rgb(0, 255, 0);' and multi_state.get_attribute('style') == 'fill: rgb(0, 255, 0);':   
+                return True
+            else:
+                return False                          
 
 
                               
